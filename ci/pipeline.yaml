@@ -9,6 +9,13 @@ resources:
       uri: https://github.com/ashwini2206soni/terraform-pipeline-concourse.git
       branch: main
 jobs:
+  - name: validate-react-app
+    plan:
+      - get: terraform-react-code
+        trigger: true
+      - task: perform
+        file: terraform-react-code/ci/task_validate.yaml
+        params: *parameters
   - name: deploy-react-app
     plan:
       - get: terraform-react-code
