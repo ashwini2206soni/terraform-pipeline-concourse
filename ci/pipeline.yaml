@@ -1,0 +1,18 @@
+---
+PARAMETERS: &parameters
+  GCP_CREDENTIALS: ((gcp_credentials))
+resources: 
+  - name: terraform-react-code
+    type: git
+    icon: github
+    source:
+      uri: https://github.com/ashwini2206soni/terraform-pipeline-concourse.git
+      branch: main
+jobs:
+  - name: deploy-react-app
+    plan:
+      - get: terraform-react-code
+        trigger: true
+      - task: perform
+        file: terraform-react-code/ci/task_deploy.yaml
+        params: *parameters
