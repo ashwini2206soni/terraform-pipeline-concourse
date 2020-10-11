@@ -1,15 +1,13 @@
----
-    platform: linux
-    image_resource:
-      type: docker-image
-      source:
-        repository: hashicorp/terraform
-        tag: '0.12.29'
-    inputs:
-    - name: terraform-react-code
-    run:
-    dir: terraform-react-code
-    path: /bin/sh
-    args:
-        - ci/validate.sh
-    
+platform: linux
+image_resource:
+type: docker-image
+source:
+    repository: hashicorp/terraform
+    tag: '0.12.29'
+inputs:
+- name: terraform-react-code
+run:
+dir: terraform-react-code
+path: /bin/sh
+args:
+    - ci/validate.sh
