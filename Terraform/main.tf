@@ -45,7 +45,7 @@ resource "google_compute_instance" "docker" {
       "sudo curl -sSL https://get.docker.com/ | sh",
       "sudo usermod -aG docker `echo $USER`",
     #   "sudo docker run -d -p 80:80 nginx"
-      "sudo docker run -d -p 80:80 ashwinisoni2206/react-app:latest"
+      "sudo docker run -d -p 80:80 ashwinisoni2206/react-app"
     ]
   }
 
