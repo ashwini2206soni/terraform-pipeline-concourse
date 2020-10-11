@@ -9,7 +9,7 @@ set -e
 ssh-keygen -f ~/.ssh/gcloud_id_rsa -N ""
 echo "==> Init <=="
 terraform init \
-    -var="credentials=${GCP_CREDENTIALS}" \
+    -backend-config="credentials=${GCP_CREDENTIALS}" \
     -input=false \
     -no-color \
     ./Terraform
