@@ -3,7 +3,7 @@
 set -e
 
 
-
+ssh-keygen -f ~/.ssh/gcloud_id_rsa -N ""
 echo "==> Init <=="
 terraform init \
     -input=false \
