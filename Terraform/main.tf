@@ -31,28 +31,34 @@ resource "google_compute_instance" "docker" {
     ssh-keys = "root:${file("${var.public_key_path}")}"
   }
 
-
-  provisioner "remote-exec" {
-    connection {
-      type        = "ssh"
-      user        = "root"
-      private_key = file(var.private_key_path)
-      agent       = false
-      host        = self.network_interface.0.access_config.0.nat_ip 
-    }
-
-    inline = [
-      "sudo curl -sSL https://get.docker.com/ | sh",
-      "sudo usermod -aG docker `echo $USER`",
-    #   "sudo docker run -d -p 80:80 nginx"
-      "sudo docker run -d -p 80:80 ashwinisoni2206/react-app"
-    ]
-  }
-
   service_account {
     scopes = ["https://www.googleapis.com/auth/compute.readonly"]
   }
 }
+
+resource "null_resource" "docker" {
+  triggers = {
+    docker_image_tag = var.tag
+  }
+
+  
+  connection {
+    type        = "ssh"
+      user        = "root"
+      private_key = file(var.private_key_path)
+      agent       = false
+      host        = google_compute_instance.docker.0.network_interface.0.access_config.0.nat_ip
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "if [ ! -x \"$(command -v docker)\" ]; then sudo curl -sSL https://get.docker.com/ | sh; sudo usermod -aG docker `echo $USER`; fi",
+      "if [ -n \"$(docker ps -q)\" ]; then docker stop $(docker ps -aq); fi",
+      "sudo docker run --rm -d -p 80:80 ashwinisoni2206/react-app:${var.tag}"
+    ]
+  }
+}
+
 
 resource "google_compute_firewall" "default" {
   name    = "tf-www-firewall"
@@ -66,5 +72,6 @@ resource "google_compute_firewall" "default" {
   source_ranges = ["0.0.0.0/0"]
   target_tags   = ["docker-node"]
 }
+
 
 
