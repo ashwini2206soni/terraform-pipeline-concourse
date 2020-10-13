@@ -20,7 +20,7 @@ echo "==> Plan <=="
 terraform plan \
     -out=main.tfplan \
     -var="credentials=${GCP_CREDENTIALS}" \
-    -var="tag=latest"\
+    -var="tag=latest-1.0"\
     -input=false \
     -no-color \
     ./Terraform
